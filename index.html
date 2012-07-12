@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>jQuery UI Example Page</title>
+		<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
+		<script type="text/javascript">
+		$(function() {
+		/* Fontsize */
+			var fooFontSize = parseInt($( "#foo" ).css( 'font-size' ));
+			$( "#css textarea" ).html( 'font-size: ' + fooFontSize + 'px ;');
+			
+			$( "#slider" ).slider({
+				value:fooFontSize,
+				min: 0,
+				max: 100,
+			
+				slide: function( event, ui ) {
+					$( "#amount span" ).text( ui.value );
+					
+									
+					$( "#foo" ).css( 'font-size', ui.value );
+					var fooFontSize = parseInt($( "#foo" ).css( 'font-size' ));
+					$( "#css textarea" ).html( 'font-size: ' + fooFontSize + 'px ;');
+			
+				}
+			});
+			$( "#amount span" ).text( $( "#slider" ).slider( "value" ) );
+		/* END Fontsize */
+		});
+		$(function() {
+		/* Edit text content */	
+			$('#content textarea').keyup(function() {
+				var fooContent = $(this).val();
+				$( "#foo" ).html( fooContent );
+			});
+			$('#css textarea').click(function() {
+				$(this).select();
+			});
+		/* END Edit text content */
+		});
+		$(function() {
+		/* Border radius */	
+			$( "#foo" ).css( 'MozBorderRadius' , '1.4em');
+			var fooBorderRadius = parseFloat($( "#foo" ).css( 'MozBorderRadius' ));
+			$( "#css textarea" ).html( 'Border-radius: ' + fooBorderRadius + 'em ;');
+			
+			$( "#sliderBorderRadius" ).slider({
+				value:fooBorderRadius,
+				min: 0,
+				max: 14,
+			
+				slide: function( event, ui ) {
+					var BorderRadiusValue = parseFloat(ui.value)/10;
+					
+					$( "#amountBorderRadius span" ).text( BorderRadiusValue );
+					$( "#css textarea" ).html( 'border-radius: ' + BorderRadiusValue + 'em ;');
+					
+					
+
+					$( "#foo" ).css( 'MozBorderRadius', BorderRadiusValue + 'em' );
+					
+				}
+			});
+		/* END Border radius */
+		});
+		</script>
+		<style type="text/css">
+			h2{font:3em/1.4em arial, helvetica, 'sans serif';margin:0 0 25px 0;}
+			.leftcol, .rightcol{float:left;width:450px;}
+			#slider, #sliderBorderRadius{width:400px;height:2px;border:0;background:#a1a1a1;}
+			#slider .ui-slider-handle, #sliderBorderRadius .ui-slider-handle{height:10px;margin:5px 0 0 0;background:#a1a1a1;border-radius:0;border:0;}
+			#amount{margin-top:20px;border:0;font:0.9em/1em georgia, serif;color:#a1a1a1;background:transparent;}
+			#amount span{font-style:italic;font-weight:bold;}
+			input:focus{outline:none;}
+			#content{margin:15px 0 0 0;font:0.9em/1.4em georgia, serif;color:#a1a1a1;background:transparent;}
+			#content textarea{width:200px;resize:none;padding:5px;border:1px solid #a1a1a1;font:0.9em/1.4em georgia, serif;color:#a1a1a1;background:transparent;}
+			#css{margin:10px 0 0 0;font:0.9em/1.4em georgia, serif;color:#a1a1a1;background:transparent;}
+			#css textarea{width:400px;height:200px;resize:none;padding:5px;border:1px solid #a1a1a1;font:0.9em/1.4em georgia, serif;color:#a1a1a1;background:transparent;}
+			label{display:block;}
+			#foo{display:inline-block;cursor:pointer;border:0.15em solid #a1a1a1;border-right:0.15em solid #888;border-bottom:0.15em solid #888;padding:0.6em;margin:10px;color:#eee;font-family:arial, helvetica, "sans serif";font-weight:bold;
+			-webkit-border-radius:2em;border-radius:2em;-moz-border-radius:2em;
+			background: #45484d; /* Old browsers */
+			background: -moz-linear-gradient(-45deg,  #45484d 0%, #000000 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#45484d), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(-45deg,  #45484d 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(-45deg,  #45484d 0%,#000000 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(-45deg,  #45484d 0%,#000000 100%); /* IE10+ */
+			background: linear-gradient(135deg,  #45484d 0%,#000000 100%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+			text-shadow: 0 0.09em 0 #000000;
+			filter: dropshadow(color=#cdcdcd, offx=0, offy=3);
+			-webkit-box-shadow:  0px 0.15em 0.2em 0px #cdcdcd;
+        
+        box-shadow:  0px 0.15em 0.2em 0px #cdcdcd;
+			}
+		</style>
+	</head>
+	<body>
+	
+		<h2>Knappgenerator</h2>
+		<div class="leftcol">	
+			
+			<div id="font-size">
+				<!-- Slider -->
+				<div id="slider"></div>
+				<div id="amount">Font-size <span></span>px</div>
+				<!-- /Slider -->
+			</div>
+			
+			<div id="border-radius">
+				<!-- Slider -->
+				<div id="sliderBorderRadius"></div>
+				<div id="amountBorderRadius">Border-radius <span></span>px</div>
+				<!-- /Slider -->
+			</div>	
+			
+			<div id="content">
+				<label for="content-text">&Auml;ndra text:</label>
+				<textarea id="content-text"></textarea>
+			</div>
+		
+			<div id="css">
+				<label for="css-text">Kopiera CSS:</label>
+				<textarea id="css-text"></textarea>
+			</div>
+		</div>
+		<div class="rightcol">
+			<div id="foo">Knapptext</div>
+		</div>
+	</body>
+</html>
+
+
