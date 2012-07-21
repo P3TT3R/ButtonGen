@@ -1,4 +1,17 @@
 #################
+##Project
+#################
+
+# Farbtastic
+farbtastic/demo1.html
+farbtastic/demo2.html
+farbtastic/README.html
+farbtastic/CHANGELOG.html
+
+# Jquery files
+jquery-ui/
+
+#################
 ## Eclipse
 #################
 
