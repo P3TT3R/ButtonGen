@@ -2,86 +2,173 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-		<title>jQuery UI Example Page</title>
+		<title>P3TT3Rs Knappgenerator</title>
 		<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
-		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
+		<script type="text/javascript" src="farbtastic/farbtastic.js"></script>
+		<link rel="stylesheet" href="farbtastic/farbtastic.css" type="text/css" />
 		<script type="text/javascript">
 		$(function() {
+		//Global variables		
+		var fooFontSize = 26; //this will set default value for slider (font size in px)
+		var fooBorderRadius = 1.4; //this will set default value for slider (border-radius in em)
+		
+		textAreaWriteContent();
+		
+		$(function() {
 		/* Fontsize */
-			var fooFontSize = parseInt($( "#foo" ).css( 'font-size' ));
-			$( "#css textarea" ).html( 'font-size: ' + fooFontSize + 'px ;');
 			
 			$( "#slider" ).slider({
 				value:fooFontSize,
-				min: 0,
+				min: 8,
 				max: 100,
 			
 				slide: function( event, ui ) {
+					
 					$( "#amount span" ).text( ui.value );
 					
-									
 					$( "#foo" ).css( 'font-size', ui.value );
-					var fooFontSize = parseInt($( "#foo" ).css( 'font-size' ));
-					$( "#css textarea" ).html( 'font-size: ' + fooFontSize + 'px ;');
-			
+
+					fooFontSize = parseFloat(ui.value);	
+					//Callback
+					textAreaWriteContent();					
 				}
 			});
-			$( "#amount span" ).text( $( "#slider" ).slider( "value" ) );
+			$( "#amount span" ).text( $( "#slider" ).slider( "value" ) );				
+			
 		/* END Fontsize */
 		});
+		
 		$(function() {
-		/* Edit text content */	
+		/* Border radius */			
+			$( "#sliderBorderRadius" ).slider({
+				value:fooBorderRadius*100,
+				min: 0,
+				max: 140,
+				slide: function( event, ui ) {
+					var BorderRadiusValue = parseFloat(ui.value)/100;
+					
+					$( "#amountBorderRadius span" ).text( BorderRadiusValue );				
+
+					$( "#foo" ).css( {
+						'borderRadius' : BorderRadiusValue + 'em', 
+						'borderTopRightRadius' : BorderRadiusValue + 'em',
+						'borderTopRightRadius': BorderRadiusValue + 'em', 
+						'borderBottomLeftRadius': BorderRadiusValue + 'em', 
+						'borderBottomRightRadius': BorderRadiusValue + 'em',
+						'WebkitBorderTopLeftRadius': BorderRadiusValue + 'em', 
+						'WebkitBorderTopRightRadius': BorderRadiusValue + 'em', 
+						'WebkitBorderBottomLeftRadius': BorderRadiusValue + 'em', 
+						'WebkitBorderBottomRightRadius': BorderRadiusValue + 'em', 
+						'MozBorderRadius': BorderRadiusValue + 'em'
+					});
+     
+					fooBorderRadius = BorderRadiusValue;
+					//Callback
+					textAreaWriteContent();
+				}
+			});
+			$( "#amountBorderRadius span" ).text( ($( "#sliderBorderRadius" ).slider( "value" ))/100 );
+		/* END Border radius */
+		});
+		
+		$(function() {
+		/* Edit text content*/	
 			$('#content textarea').keyup(function() {
 				var fooContent = $(this).val();
 				$( "#foo" ).html( fooContent );
 			});
+		/* END Edit text content */
+		
+		/* CSS textarea select all */
 			$('#css textarea').click(function() {
 				$(this).select();
 			});
-		/* END Edit text content */
-		});
-		$(function() {
-		/* Border radius */	
-			$( "#foo" ).css( 'MozBorderRadius' , '1.4em');
-			var fooBorderRadius = parseFloat($( "#foo" ).css( 'MozBorderRadius' ));
-			$( "#css textarea" ).html( 'Border-radius: ' + fooBorderRadius + 'em ;');
-			
-			$( "#sliderBorderRadius" ).slider({
-				value:fooBorderRadius,
-				min: 0,
-				max: 14,
-			
-				slide: function( event, ui ) {
-					var BorderRadiusValue = parseFloat(ui.value)/10;
-					
-					$( "#amountBorderRadius span" ).text( BorderRadiusValue );
-					$( "#css textarea" ).html( 'border-radius: ' + BorderRadiusValue + 'em ;');
-					
-					
-
-					$( "#foo" ).css( 'MozBorderRadius', BorderRadiusValue + 'em' );
-					
-				}
+			$('#css textarea').keydown(function() {
+				event.preventDefault()
+				$(this).select();
 			});
-		/* END Border radius */
+		/* END CSS textarea select all */
 		});
+		
+		/* Colorpickers */
+		var borderColor = '#';
+		var textColor = '#';
+			$('#BgColorpicker').farbtastic(function(color){
+				var choosePicker = $('input:radio[name=picker]:checked').val();
+				if(choosePicker == 'borderColor'){
+					$('#foo').css({'border-color':color});
+					$('#color').val(color);
+					borderColor = color;
+				}
+				else if(choosePicker == 'textColor'){
+					$('#foo').css({'color':color});
+					$('#color').val(color);
+					textColor = color;
+				}
+				else if(choosePicker == undefined){
+					$('#color').val('Vilken färg vill du ändra?');
+					$('#color').blur();
+					return;
+				}
+				else{
+				alert(choosePicker);
+				return;
+				}
+				
+			});
+			$('input:radio[name=picker]').change(function(){
+				 if( $(this).is(':checked') ){ 
+					if($(this).val() == 'borderColor'){$.farbtastic('#BgColorpicker').setColor(borderColor);}
+					else if($(this).val() == 'textColor'){$.farbtastic('#BgColorpicker').setColor(textColor);}
+				 }
+			});
+			
+			$('#BgColorpicker').hide();
+			$('#color').focus(function(){
+				$('#BgColorpicker').fadeIn('slow');
+			});
+			$('#color').blur(function(){
+				$('#BgColorpicker').fadeOut('slow', function() {
+					$('#BgColorpicker').hide();
+				});
+			});
+			/*$('#colorPickers input:radio').click(function(){
+				$('#color').val('#');
+			});*/
+			
+		/* END Colorpickers */
+		
+		function textAreaWriteContent() {
+		/* Set CSS textarea content */
+			$( "#css textarea" ).html( 
+				'font-size: ' + fooFontSize + 'px ; \r' + 
+				'border-radius: ' + fooBorderRadius + 'em ; \r' +
+				'-webkit-border-radius: ' + fooBorderRadius + 'em ; \r' +
+				'-moz-border-radius: ' + fooBorderRadius + 'em ; \r' +
+				'border: ' + '0.15em solid ' + borderColor + ' ; \r' 
+			);
+		/* END Set CSS textarea content */
+		};
+		});
+		
 		</script>
 		<style type="text/css">
 			h2{font:3em/1.4em arial, helvetica, 'sans serif';margin:0 0 25px 0;}
 			.leftcol, .rightcol{float:left;width:450px;}
 			#slider, #sliderBorderRadius{width:400px;height:2px;border:0;background:#a1a1a1;}
-			#slider .ui-slider-handle, #sliderBorderRadius .ui-slider-handle{height:10px;margin:5px 0 0 0;background:#a1a1a1;border-radius:0;border:0;}
-			#amount{margin-top:20px;border:0;font:0.9em/1em georgia, serif;color:#a1a1a1;background:transparent;}
-			#amount span{font-style:italic;font-weight:bold;}
+			#sliderBorderRadius{margin:20px 0 0 0;}
+			#slider .ui-slider-handle, #sliderBorderRadius .ui-slider-handle{height:10px;margin:5px 0 0 0;background:#a1a1a1;border-radius:0;-moz-border-radius:0;border:0;}
+			#amount, #amountBorderRadius{margin-top:20px;border:0;font:0.9em/1em georgia, serif;color:#a1a1a1;background:transparent;}
 			input:focus{outline:none;}
 			#content{margin:15px 0 0 0;font:0.9em/1.4em georgia, serif;color:#a1a1a1;background:transparent;}
 			#content textarea{width:200px;resize:none;padding:5px;border:1px solid #a1a1a1;font:0.9em/1.4em georgia, serif;color:#a1a1a1;background:transparent;}
 			#css{margin:10px 0 0 0;font:0.9em/1.4em georgia, serif;color:#a1a1a1;background:transparent;}
 			#css textarea{width:400px;height:200px;resize:none;padding:5px;border:1px solid #a1a1a1;font:0.9em/1.4em georgia, serif;color:#a1a1a1;background:transparent;}
 			label{display:block;}
-			#foo{display:inline-block;cursor:pointer;border:0.15em solid #a1a1a1;border-right:0.15em solid #888;border-bottom:0.15em solid #888;padding:0.6em;margin:10px;color:#eee;font-family:arial, helvetica, "sans serif";font-weight:bold;
-			-webkit-border-radius:2em;border-radius:2em;-moz-border-radius:2em;
+			#foo{display:inline-block;position:relative;cursor:pointer;border:0.15em solid #a1a1a1;padding:0.6em;margin:10px;color:#eee;font-size:26px;font-family:arial, helvetica, "sans serif";font-weight:bold;
+			-webkit-border-radius:1.4em;border-radius:1.4em;-moz-border-radius:1.4em;
 			background: #45484d; /* Old browsers */
 			background: -moz-linear-gradient(-45deg,  #45484d 0%, #000000 100%); /* FF3.6+ */
 			background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#45484d), color-stop(100%,#000000)); /* Chrome,Safari4+ */
@@ -89,13 +176,32 @@
 			background: -o-linear-gradient(-45deg,  #45484d 0%,#000000 100%); /* Opera 11.10+ */
 			background: -ms-linear-gradient(-45deg,  #45484d 0%,#000000 100%); /* IE10+ */
 			background: linear-gradient(135deg,  #45484d 0%,#000000 100%); /* W3C */
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 			text-shadow: 0 0.09em 0 #000000;
-			filter: dropshadow(color=#cdcdcd, offx=0, offy=3);
-			-webkit-box-shadow:  0px 0.15em 0.2em 0px #cdcdcd;
-        
-        box-shadow:  0px 0.15em 0.2em 0px #cdcdcd;
+			-webkit-box-shadow:  0 0.1em 0 0 #888;
+			box-shadow:  0 0.1em 0 0 #888;
+			-webkit-transition: top ease-in-out 200ms, left ease-in-out 200ms, -webkit-box-shadow ease-in-out 200ms;
+			-moz-transition: top ease-in-out 200ms, left ease-in-out 200ms, box-shadow ease-in-out 200ms;
+			-ms-transition: top ease-in-out 200ms, left ease-in-out 200ms, box-shadow ease-in-out 200ms;
+			-o-transition: top ease-in-out 200ms, left ease-in-out 200ms, box-shadow ease-in-out 200ms;
+			transition: top ease-in-out 200ms, left ease-in-out 200ms, box-shadow ease-in-out 200ms;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
 			}
+			#foo:hover{background:#000;color:#999;border:0.15em solid #888;
+			-webkit-box-shadow:  0 0.1em 0 0 #555;
+			box-shadow:  0 0.1em 0 0 #555;}
+			#foo:active{top:0.1em;-webkit-box-shadow:none;
+			box-shadow: none;}
+			
+			#BgColorpicker{position:absolute;background:#fff;top:-20px;left:154px;border:2px solid #999;}
+			#color{border:1px solid #999;}
+			#colorPickers{position:relative;margin:20px 0 0 0;font:0.9em/1em georgia, serif;color:#a1a1a1;}
+			#colorPickers label{display:inline;}
+			#colorPickers p{margin:7px 0 0 0;}
 		</style>
 	</head>
 	<body>
@@ -113,9 +219,18 @@
 			<div id="border-radius">
 				<!-- Slider -->
 				<div id="sliderBorderRadius"></div>
-				<div id="amountBorderRadius">Border-radius <span></span>px</div>
+				<div id="amountBorderRadius">Border-radius <span></span>em</div>
 				<!-- /Slider -->
-			</div>	
+			</div>
+			<div id="colorPickers">
+				<input type="radio" name="picker" id="pickerBorder" checked value="borderColor" /> <label for="pickerBorder">Border-color</label>
+				<input type="radio" name="picker" id="pickerColor" value="textColor" /> <label for="pickerColor">Color</label>
+				<p>Choose color:</p>
+				<div id="BgColorpicker"></div>
+				<form>
+					<input type="text" id="color" name="color" value="#" />
+				</form>
+			</div>
 			
 			<div id="content">
 				<label for="content-text">&Auml;ndra text:</label>
